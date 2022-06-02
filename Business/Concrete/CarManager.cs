@@ -1,9 +1,11 @@
 ﻿using Business.Abstract;
 using Business.Constant;
+using Business.ValidationRules.FluentValidation;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +16,25 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
+       
         ICarDal _carDal;
         public CarManager(ICarDal carDal)
         {
             _carDal = carDal;
             
         }
-
+       
+       [ValidationAspect]
         public IResult Add(Car car)
         {
+            var context = new ValidationContext<Car>(car);
+            CarValidator carvalidator = new CarValidator();
+            var result =carvalidator.Validate(context);
+            if (!result.IsValid)
+            {
+                throw new ValidationException(result.Errors);
+            }
+
             if (car.Description.Length >= 2 && car.DailyPrice > 0)
             {
                 _carDal.Add(car);

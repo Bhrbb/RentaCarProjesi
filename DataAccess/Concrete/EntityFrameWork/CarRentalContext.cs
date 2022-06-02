@@ -13,7 +13,7 @@ namespace DataAccess.Concrete.EntityFrameWork
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-P1SH4NN\SQL; Database = RentaCar_db; Trusted_Connection=true", builder =>
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB; Database = RentaCar; Trusted_Connection=true", builder =>
              {
                  builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
              });
